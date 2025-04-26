@@ -1,8 +1,9 @@
 # Trabajo Final
-## Abel Garcia - Telematica - 2025-1
+## Abel Garcia, Miguel Moreno - Telematica - 2025-1
 Instrucciones:
 
 - En la carpeta terraform estan los archivos necesarios para desplegar una vpc con el EC2 que contendrá el servidor web. Se deben pegar los archivos en una carpeta y ejecutar terraform en ellos. Se debe de tener una clave publica ClaveTelematica.pub, y configurar correctamente el aws-cli.
 - Ya desplegado el VPC, necesitamos tener una maquina que sirva como servidor para Jenkins. Hecho esto entramos al dashboard con la IP del servidor Jenkins en el puerto 8080 y creamos un trabajo pipeline que se ejecute cada vez que hacemos un commit en el repositorio (en los ajustes se marca la casilla GitHub y se pone el link de este repositorio, y se marca la casilla GitHub hook trigger for GITScm polling). Tambien se tiene que instalar el plugin "SSH Agent". Tambien se tiene que crear una credencial de tipo "SSH Username with private key" con el archivo .pem que usamos en terraform. Lo que tiene que ejecutar el trabajo está en el archivo Jenkinsfile
 - Cuando Terraform termina de desplegar la VPC, nos va a dar la IP publica del servidor web. Esta IP la tenemos que reemplazar en el archivo Jenkinsfile, en los comandos para el scp y el ssh (lineas 9 y 10)
+- Si se crea un repositorio nuevo o se importa este repositorio a otro, hay que cambiar el comando git clone del Jenkinsfile, y en el repositorio de GitHub, en la configuracion, hay que ir a la pestaña de Webhooks y agregar uno nuevo. En payload URL hay que poner "http://<IP_JENKINS>:8080/github-webhook/", en content type poner "application/json".
 - Ya modificados los archivos, el primer build del trabajo de Jenkinks tiene que ser manual. Despues con cualquier commit que hagamos, al hacer el push, Jenkins se encargará de conectarse al servidor y ejecutar deploy.sh, que crea un container en Docker que contiene la pagina web, la cual podemos ver entrando a http://<IP_PUBLICA_SERVIDOR>/
